@@ -29,6 +29,7 @@ void *recvmg(void *sock)
 	int j;
 	while((len = recv(cl.sockno,msg,500,0)) > 0) {
 		msg[len] = '\0';
+		printf("\n%s",msg);
 		sendtoall(msg,cl.sockno);
 		memset(msg,'\0',sizeof(msg));
 	}
@@ -53,6 +54,7 @@ void *recvmg2(void *sock)
 	int len;
 	while((len = recv(their_sock,msg,500,0)) > 0) {
 		msg[len] = '\0';
+		//printf("\n%s",msg);
 		fputs(msg,stdout);
 		memset(msg,'\0',sizeof(msg));
 	}
