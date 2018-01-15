@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <pthread.h>
-void sendtoall(char *msg,int curr);
+void semsg();
 void *recvmg(void *sock);
 void *recvmg2(void *sock);
 

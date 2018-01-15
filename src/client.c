@@ -1,5 +1,5 @@
 #include"he.h"
-void sendtoall(char *msg,int curr);
+void semsg();
 void *recvmg2(void *sock);
 int main(int argc, char *argv[])
 {

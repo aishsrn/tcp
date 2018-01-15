@@ -6,19 +6,25 @@ struct client_info {
 int clients[100];
 int n=0;
 pthread_mutex_t mutex=PTHREAD_MUTEX_INITIALIZER;
-void sendtoall(char *msg,int curr)
+void semsg(int curr)
 {
-	int i;
-	pthread_mutex_lock(&mutex);
-	for(i = 0; i < n; i++) {
-		if(clients[i] != curr) {
-			if(send(clients[i],msg,strlen(msg),0) < 0) {
-				perror("sending failure");
-				continue;
-			}
+	int i,len; char msg[500],res[500]; int cli;
+	
+	if(fgets(msg,500,stdin) > 0) 
+	{
+		strcpy(res,"Server:");
+		strcat(res,msg);
+		len = write(curr,res,strlen(res));
+		if(len < 0)
+		 {
+			perror("message not sent");
+			exit(1);
 		}
+		memset(msg,'\0',sizeof(msg));
+		memset(res,'\0',sizeof(res));
 	}
-	pthread_mutex_unlock(&mutex);
+		
+	
 }
 void *recvmg(void *sock)
 {
@@ -30,9 +36,10 @@ void *recvmg(void *sock)
 	while((len = recv(cl.sockno,msg,500,0)) > 0) {
 		msg[len] = '\0';
 		printf("\n%s",msg);
-		sendtoall(msg,cl.sockno);
+		semsg(cl.sockno);
 		memset(msg,'\0',sizeof(msg));
 	}
+	//semsg(cl.sockno);
 	pthread_mutex_lock(&mutex);
 	printf("%s disconnected\n",cl.ip);
 	for(i = 0; i < n; i++) {
@@ -54,8 +61,8 @@ void *recvmg2(void *sock)
 	int len;
 	while((len = recv(their_sock,msg,500,0)) > 0) {
 		msg[len] = '\0';
-		//printf("\n%s",msg);
-		fputs(msg,stdout);
+		printf("\n%s",msg);
+		//fputs(msg,stdout);
 		memset(msg,'\0',sizeof(msg));
 	}
 }

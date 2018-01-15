@@ -1,11 +1,12 @@
 #include"he.h"
-void sendtoall(char *msg,int curr);
+void semsg();
 void *recvmg(void *sock);
 extern pthread_mutex_t mutex;
 extern int clients[100],n;
 struct client_info {
 	int sockno;
 	char ip[INET_ADDRSTRLEN];
+	
 };
 int main(int argc,char** argv)
 {
@@ -17,9 +18,8 @@ int main(int argc,char** argv)
 	pthread_t sendt,recvt;
 	char msg[500];
 	int len;
-	struct client_info cl;
-	char ip[INET_ADDRSTRLEN];;
-	;
+	struct client_info cl,c[100];
+	char ip[INET_ADDRSTRLEN];
 	if(argc > 2) {
 		printf("too many arguments");
 		exit(1);
@@ -31,7 +31,7 @@ int main(int argc,char** argv)
 	my_addr.sin_port = htons(portno);
 	my_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
 	their_addr_size = sizeof(their_addr);
-
+	char res[600];
 	if(bind(my_sock,(struct sockaddr *)&my_addr,sizeof(my_addr)) != 0) {
 		perror("binding unsuccessful");
 		exit(1);
@@ -42,19 +42,24 @@ int main(int argc,char** argv)
 		exit(1);
 	}
 
-	while(1) {
-		if((their_sock = accept(my_sock,(struct sockaddr *)&their_addr,&their_addr_size)) < 0) {
+	while(1)
+	 {
+
+		if((their_sock = accept(my_sock,(struct sockaddr *)&their_addr,&their_addr_size)) < 0) 
+		{
 			perror("accept unsuccessful");
 			exit(1);
 		}
 		pthread_mutex_lock(&mutex);
 		inet_ntop(AF_INET, (struct sockaddr *)&their_addr, ip, INET_ADDRSTRLEN);
-		printf("%s connected\n",ip);
+		printf("%s connected to sock %d\n",ip,their_sock);
 		cl.sockno = their_sock;
 		strcpy(cl.ip,ip);
 		clients[n] = their_sock;
 		n++;
 		pthread_create(&recvt,NULL,recvmg,&cl);
+		
+
 		pthread_mutex_unlock(&mutex);
 	}
 	return 0;
