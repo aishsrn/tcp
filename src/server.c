@@ -1,5 +1,5 @@
 #include"he.h"
-void semsg();
+void *semsg(void *sock);
 void *recvmg(void *sock);
 extern pthread_mutex_t mutex;
 extern int clients[100],n;
@@ -58,7 +58,9 @@ int main(int argc,char** argv)
 		clients[n] = their_sock;
 		n++;
 		pthread_create(&recvt,NULL,recvmg,&cl);
+		pthread_create(&sendt,NULL,semsg,&cl);
 		
+		//pthread_join(recvt,NULL);
 
 		pthread_mutex_unlock(&mutex);
 	}

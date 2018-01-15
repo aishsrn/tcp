@@ -1,5 +1,5 @@
 #include"he.h"
-void semsg();
+void *semsg(void *sock);
 void *recvmg2(void *sock);
 int main(int argc, char *argv[])
 {

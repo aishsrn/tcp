@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <pthread.h>
-void semsg();
+void *semsg(void *sock);
 void *recvmg(void *sock);
 void *recvmg2(void *sock);
 

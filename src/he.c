@@ -6,15 +6,16 @@ struct client_info {
 int clients[100];
 int n=0;
 pthread_mutex_t mutex=PTHREAD_MUTEX_INITIALIZER;
-void semsg(int curr)
+void *semsg(void *sock)
 {
+	struct client_info cl = *((struct client_info *)sock);
 	int i,len; char msg[500],res[500]; int cli;
 	
-	if(fgets(msg,500,stdin) > 0) 
+	while(fgets(msg,500,stdin) > 0) 
 	{
 		strcpy(res,"Server:");
 		strcat(res,msg);
-		len = write(curr,res,strlen(res));
+		len = write(cl.sockno,res,strlen(res));
 		if(len < 0)
 		 {
 			perror("message not sent");
@@ -29,14 +30,16 @@ void semsg(int curr)
 void *recvmg(void *sock)
 {
 	struct client_info cl = *((struct client_info *)sock);
-	char msg[500];
+	char msg[500],res[500];
 	int len;
 	int i;
 	int j;
+	
 	while((len = recv(cl.sockno,msg,500,0)) > 0) {
 		msg[len] = '\0';
 		printf("\n%s",msg);
-		semsg(cl.sockno);
+		
+		//semsg(cl.sockno);
 		memset(msg,'\0',sizeof(msg));
 	}
 	//semsg(cl.sockno);
