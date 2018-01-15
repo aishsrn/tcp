@@ -34,7 +34,8 @@ int main(int argc, char *argv[])
 	inet_ntop(AF_INET, (struct sockaddr *)&their_addr, ip, INET_ADDRSTRLEN);
 	printf("connected to %s, start chatting\n",ip);
 	pthread_create(&recvt,NULL,recvmg2,&my_sock);
-	while(fgets(msg,500,stdin) > 0) {
+	while(fgets(msg,500,stdin) > 0)
+	{
 		strcpy(res,username);
 		strcat(res,":");
 		strcat(res,msg);
@@ -46,7 +47,8 @@ int main(int argc, char *argv[])
 		memset(msg,'\0',sizeof(msg));
 		memset(res,'\0',sizeof(res));
 	}
-	pthread_join(recvt,NULL);
+	
+	
 	close(my_sock);
 
 	return 0;

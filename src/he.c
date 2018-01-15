@@ -8,24 +8,36 @@ pthread_mutex_t mutex=PTHREAD_MUTEX_INITIALIZER;
 void *semsg(void *sock)
 {
 	struct client_info cl = *((struct client_info *)sock);
-	int i,len; char msg[500],res[500]; int cli;
-	
-	while(fgets(msg,500,stdin) > 0) 
-	{
+	int i,y,len; char msg[500],res[500]; int cli;
+	wr: printf("\nClient sock :");
+		scanf("%d",&cli);
+	printf("\nMessage:");
+	memset(msg,'\0',sizeof(msg));
+	memset(res,'\0',sizeof(res));
+	while(1)
+	{	
+		
+		
+		scanf("%s",msg);
+		
 		strcpy(res,"Server:");
 		strcat(res,msg);
-		len = write(cl.sockno,res,strlen(res));
+		len = write(cli,res,strlen(res));
 		if(len < 0)
-		 {
+		{
 			perror("message not sent");
 			exit(1);
 		}
+		
+		if(msg[0]=='0') goto wr;
 		memset(msg,'\0',sizeof(msg));
 		memset(res,'\0',sizeof(res));
+		
 	}
 		
 	
 }
+
 void *recvmg(void *sock)
 {
 	struct client_info cl = *((struct client_info *)sock);
@@ -38,10 +50,10 @@ void *recvmg(void *sock)
 		msg[len] = '\0';
 		printf("\n%s",msg);
 		
-		//semsg(cl.sockno);
+		
 		memset(msg,'\0',sizeof(msg));
 	}
-	//semsg(cl.sockno);
+	
 	pthread_mutex_lock(&mutex);
 	printf("%s disconnected\n",cl.ip);
 	
