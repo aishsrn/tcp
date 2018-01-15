@@ -3,8 +3,7 @@ struct client_info {
 	int sockno;
 	char ip[INET_ADDRSTRLEN];
 };
-int clients[100];
-int n=0;
+
 pthread_mutex_t mutex=PTHREAD_MUTEX_INITIALIZER;
 void *semsg(void *sock)
 {
@@ -45,16 +44,9 @@ void *recvmg(void *sock)
 	//semsg(cl.sockno);
 	pthread_mutex_lock(&mutex);
 	printf("%s disconnected\n",cl.ip);
-	for(i = 0; i < n; i++) {
-		if(clients[i] == cl.sockno) {
-			j = i;
-			while(j < n-1) {
-				clients[j] = clients[j+1];
-				j++;
-			}
-		}
-	}
-	n--;
+	
+	
+	
 	pthread_mutex_unlock(&mutex);
 }
 void *recvmg2(void *sock)

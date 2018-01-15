@@ -55,12 +55,11 @@ int main(int argc,char** argv)
 		printf("%s connected to sock %d\n",ip,their_sock);
 		cl.sockno = their_sock;
 		strcpy(cl.ip,ip);
-		clients[n] = their_sock;
-		n++;
+		
 		pthread_create(&recvt,NULL,recvmg,&cl);
 		pthread_create(&sendt,NULL,semsg,&cl);
 		
-		//pthread_join(recvt,NULL);
+		
 
 		pthread_mutex_unlock(&mutex);
 	}
